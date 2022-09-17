@@ -1,3 +1,4 @@
+using Dreamteck.Splines;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,6 +16,8 @@ public interface IGameManager
     CameraManager cameraManager { get; set; }
     PoolManager poolManager { get; set; }
     LevelManager levelManager { get; set; }
+
+    void LoadNewLevel(SplineComputer splineComputer);
 }
 
 public class GameManager : IGameManager
@@ -30,7 +33,6 @@ public class GameManager : IGameManager
             {
                 _state = value;
                 EventManager.Get<OnGameStateChanged>().Execute(value);
-                Debug.LogError("Game State : " + value);
             }
         }
 
@@ -42,30 +44,40 @@ public class GameManager : IGameManager
         get => _player; set => _player = value;
     }
 
-    public UIManager _uiManager;
+    private UIManager _uiManager;
     public UIManager uiManager
     {
         get => _uiManager; set => _uiManager = value;
     }
 
-    public CameraManager _cameraManager;
+    private CameraManager _cameraManager;
     public CameraManager cameraManager
     {
         get => _cameraManager; set => _cameraManager = value;
     }
 
-    public PoolManager _poolManager;
+    private PoolManager _poolManager;
     public PoolManager poolManager
     {
         get => _poolManager; set => _poolManager = value;
     }
 
-    public LevelManager _levelManager;
+    private LevelManager _levelManager;
     public LevelManager levelManager { get => _levelManager; set => _levelManager = value; }
 
     public void StartEndingProcess()
     {
         State = GameState.Success;
+        EventManager.Get<OnGameSuccessEvent>().Execute();
         Debug.LogError("Game Ended ");
+    }
+
+    public void LoadNewLevel(SplineComputer splineComputer)
+    {
+        State = GameState.Pause;
+        player.handAnimator.SetBool("GameEnded", false);
+        player.SetNewSpline(splineComputer);
+        player.ringController.ClearAllRings();
+
     }
 }

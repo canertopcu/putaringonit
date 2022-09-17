@@ -1,3 +1,5 @@
+using DG.Tweening;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -55,6 +57,7 @@ public class PlayerRingController : MonoBehaviour
     {
         PoolType selectedPoolType = PoolManager.PoolTypeSelector(collectableGem.gemType);
         StackableGem created = gameManager.poolManager.Spawn(selectedPoolType, gemParent.position, Quaternion.identity, gemPlace.transform).GetComponent<StackableGem>();
+        created.collectable = collectableGem;
         return created;
     }
 
@@ -66,6 +69,16 @@ public class PlayerRingController : MonoBehaviour
             gems[gems.Count - i - 1].BoingBoingEffect();
             yield return new WaitForSeconds(0.1f);
         }
+    }
+
+    internal void ClearAllRings()
+    {
+        StopAllCoroutines(); 
+        foreach (var item in gems)
+        {
+            Destroy(item.gameObject);
+        }
+        gems.Clear(); 
     }
 
     //public void MergeAllGems() {
@@ -119,5 +132,18 @@ public class PlayerRingController : MonoBehaviour
         gems.Clear();
         gems = newGemList;
         StartCoroutine(WarnAllGems());
+    }
+
+    public void Drop()
+    {
+        //for (int i = 0; i < (gems.Count >= 3 ? 3 : gems.Count); i++)
+        //{
+        //    StackableGem gem = gems.Last(); 
+        //    gems.Remove(gem);
+        //    var poolType = PoolManager.PoolTypeSelector(gem.gemType);
+        //    gameManager.poolManager.Despawn(poolType, gem.gameObject);
+            
+        //}
+
     }
 }

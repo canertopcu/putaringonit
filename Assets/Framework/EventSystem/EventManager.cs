@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class OnGameSuccessEvent : AEvent { }
 public class OnGameStateChanged : AEvent<GameState> { }
+public class OnLevelLoaded : AEvent<int> { }
 public static class EventManager
 {
     private static readonly EventHub eventHub = new EventHub();

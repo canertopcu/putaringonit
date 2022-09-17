@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using Zenject;
 
-public class StartPanelController : Panel
+public class StartPanel : Panel
 { 
     [SerializeField] private GameObject startButton;
-     
+    public TextMeshProUGUI levelText;
     // Start is called before the first frame update
     private void Awake()
     {
@@ -19,16 +20,18 @@ public class StartPanelController : Panel
         myEventTrigger.triggers.Add(entry);
     }
 
-  
+    public void SetLevelText(int levelId) {
+        levelText.text = "Level " + levelId;
+    }
     private void OnStartButtonPressed(BaseEventData eventData)
     {
         HidePanel();
         gameManager.State = GameState.Play;
     }
 
-
-   
-
-    
+    private void OnEnable()
+    {
+        SetLevelText(gameManager.levelManager.activeLevelId);
+    }
 
 }

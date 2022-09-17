@@ -41,10 +41,11 @@ public class LevelManager : MonoBehaviour
     }
 
     public void LoadLevel()
-    { 
+    {
         Destroy(lastLoadedLevel);
-        lastLoadedLevel = Instantiate(levels[activeLevelId % levels.Count], Vector3.zero, Quaternion.identity); 
-        gameManager.player.SetNewSpline(lastLoadedLevel.GetComponent<ILevel>().splineComputer);
+        lastLoadedLevel = Instantiate(levels[activeLevelId % levels.Count], Vector3.zero, Quaternion.identity);
+        gameManager.LoadNewLevel(lastLoadedLevel.GetComponent<ILevel>().splineComputer);
+        EventManager.Get<OnLevelLoaded>().Execute(activeLevelId);
     }
 
     void SaveLevel()

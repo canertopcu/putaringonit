@@ -36,13 +36,44 @@ public class UIManager : MonoBehaviour
             item.Initialize(gameManager);
             item.HidePanel();
         }
-        activePanelIndex++; 
+        activePanelIndex++;
         panels[activePanelIndex].ShowPanel();
     }
 
-    // Update is called once per frame
-    void Update()
+    public void ActivatePanel(Type pageType)
+    { 
+        foreach (var item in panels)
+        {
+            if (pageType == item.GetType())
+            { 
+                item.ShowPanel();
+            }
+            else
+            {
+                item.HidePanel();
+            }
+        }
+    }
+     
+    private void OnEnable()
     {
-        
+        EventManager.Get<OnLevelLoaded>().AddListener(OnLevelLoaded);
+        EventManager.Get<OnGameSuccessEvent>().AddListener(OnLevelSuccessEvent);
+    }
+
+    private void OnDisable()
+    {
+        EventManager.Get<OnLevelLoaded>().RemoveListener(OnLevelLoaded);
+        EventManager.Get<OnGameSuccessEvent>().RemoveListener(OnLevelSuccessEvent);
+
+    }
+
+    private void OnLevelLoaded(int level)
+    {
+        ActivatePanel(typeof(StartPanel));
+    }
+
+    private void  OnLevelSuccessEvent() {
+        ActivatePanel(typeof(EndPanel));
     }
 }

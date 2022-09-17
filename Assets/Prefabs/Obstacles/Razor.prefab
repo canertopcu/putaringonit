@@ -188,7 +188,7 @@ MonoBehaviour:
   optionalBool1: 0
   optionalFloat0: 0
   optionalInt0: 0
-  optionalRotationMode: 0
+  optionalRotationMode: 1
   optionalScrambleMode: 0
   optionalShakeRandomnessMode: 0
   optionalString: 
